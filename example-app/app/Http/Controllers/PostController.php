@@ -82,10 +82,10 @@ public function create(){
         
     }
 
-public function update( $id)
+public function update()
 {
 
-    return view('post.index',["id"=> $id]);
+    return redirect()->route('posts.index');
 }
 
 public function store(){
