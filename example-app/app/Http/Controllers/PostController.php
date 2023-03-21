@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Comment;
+use App\Models\Post;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PostController extends Controller
 {
@@ -11,11 +16,14 @@ class PostController extends Controller
 
 
 
-//creat post
-public function create(){
-    // return "hii";
-    return view('post.create');
-}
+    //creat post
+    public function create()
+    {
+        $users = User::all();
+
+
+        return view('post.create', ["users" => $users]);
+    }
 
 
 
@@ -23,76 +31,82 @@ public function create(){
 
     public function index()
     {
-        $allPosts = [
-            [
-                'id' => 1,
-                'title' => 'Laravel',
-                'posted_by' => 'Ahmed',
-                'created_at' => '2022-08-01 10:00:00'
-            ],
+        
 
-            [
-                'id' => 2,
-                'title' => 'PHP',
-                'posted_by' => 'Mohamed',
-                'created_at' => '2022-08-01 10:00:00'
-            ],
+        $allPosts = Post::paginate(5);
 
-            [
-                'id' => 3,
-                'title' => 'Javascript',
-                'posted_by' => 'Ali',
-                'created_at' => '2022-08-01 10:00:00'
-            ],
-        ];
+
 
         return view('post.index', ['posts' => $allPosts]);
     }
 
     public function show($id)
     {
-    //    dd($id);
-        $post =  [
-            'id' => 3,
-            'title' => 'Javascript',
-            'posted_by' => 'Ali',
-            'created_at' => '2022-08-01 10:00:00',
-            'description' => 'hello description',
-        ];
 
-//        dd($post);
 
-        return view('post.show', ['post' => $post]);
+        $post = post::find($id);
+        // dd($post);
+        $comments=$post->comments;
+
+    
+        // dd($comments);
+        return view('post.show', ['post' => $post,'comments'=>$comments]);
     }
 
 
     //update
-    public function edit($id){
-        $post =  [
-            'id' => 3,
-            'title' => 'Javascript',
-            'posted_by' => 'Ali',
-            'created_at' => '2022-08-01 10:00:00',
-            'description' => 'hello description',
-        ];
+    public function edit($id)
+    {
+        $post =  post::find($id);
 
-//        dd($post);
+        //        dd($post);
 
         return view('post.edit', ['post' => $post]);
-        
     }
 
-public function update()
-{
+    public function update($id)
+    {
+        $title = request()->title;
+        $description = request()->description;
+        $post_creator = request()->post_creator;
 
-    return redirect()->route('posts.index');
-}
+        post::where('id', $id)->update([
+            'title' => $title,
+            'description' => $description,
+            // 'user_id' => $post_creator
+        ]);
 
-public function store(){
+        return redirect()->route('posts.index');
+    }
 
-    return redirect()->route('posts.index');
-}
+    public function store(Request $request)
+    {
+        $carbon=Carbon::now()->toFormattedDateString();
+        // dd($carbon);
+        // $input = request()->all();
+        $title = request()->title;
+        $description = request()->description;
+        $post_creator = request()->post_creator;
+
+        post::create([
+            'title' => $title,
+            'description' => $description
+            
 
 
+        ]);
 
+
+        return redirect()->route('posts.index');
+    }
+
+    public function destroy($id)
+    {
+       
+        $post = post::find($id);
+        // dd($flight);
+        $post->delete();
+        return redirect()->route('posts.index');
+       
+    }
 }

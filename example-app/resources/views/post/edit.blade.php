@@ -24,10 +24,10 @@
 
 <div class="input-group input-group-sm mb-3 pt-5">
   <span class="input-group-text" id="inputGroup-sizing-sm">post creator</span>
-  <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" value="{{$post['posted_by']}}"name="post_creator" >
+  <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" value="{{$post->user->name}}"name="post_creator" >
 </div>
 
-<input type="submit" class="btn btn-danger">
+<input type="submit" class="btn btn-danger" value="Update">
 </form>
 
 
