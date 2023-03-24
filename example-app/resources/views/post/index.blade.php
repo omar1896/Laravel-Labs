@@ -13,6 +13,7 @@
         <tr>
             <th scope="col">ID</th>
             <th scope="col">Title</th>
+            <th scope="col">Slug</th>
             <th scope="col">Posted By</th>
             <th scope="col">Created At</th>
             <th scope="col">Actions</th>
@@ -25,6 +26,11 @@
         <tr>
             <td>{{$post->id}}</td>
             <td>{{$post->title}}</td>
+            @if($post->slug)
+            <td>{{$post->slug}}</td>
+            @else
+            <td>NOT FOUND</td>
+            @endif
             @if($post->user)
             <td>{{$post->user->name}}</td>
             @else
@@ -33,7 +39,10 @@
             <td>{{$post->created_at->format('Y - m - d')}}</td>
             <td>
                 <div>
-                    <a href="{{route('posts.show', $post['id'])}}" class="btn btn-info">View</a>
+                  
+                        <a href="{{route('posts.show', $post['id'])}}" class="btn btn-info">View</a>
+                 
+                   
                     <a href="{{route('posts.edit',$post['id'])}}" class="btn btn-primary">Edit</a>
 
                     <button type="submit" class="btn btn-danger delete"  data-id="{{$post->id}}"   style="display:inline-block;" data-bs-toggle="modal" data-bs-target="#exampleModal">delete</button>
