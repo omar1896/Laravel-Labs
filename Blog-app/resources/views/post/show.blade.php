@@ -8,16 +8,16 @@
         Post Info
     </div>
     <div class="card-body">
-       
+
         <h5 class="card-title">Title: {{$post->title}}</h5>
         <h4 class="card-text">Description: {{$post->description}}</h4>
     </div>
 </div>
 @if($post->photo)
-        
-<img src="{{Storage::url($post->photo)}}" style="width: 250px" alt="photo">
-   
-        @endif
+
+<img src="{{asset('storage/'.$post->photo)}}" style="width: 250px" alt="photo">
+
+@endif
 
 <div class="card ">
     <div class="card-header">
@@ -50,3 +50,5 @@
 </form>
 
 @endsection
+
+
